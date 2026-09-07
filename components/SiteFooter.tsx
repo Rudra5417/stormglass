@@ -1,7 +1,7 @@
 export default function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-sg-panel-2 bg-sg-panel">
-      <p className="mx-auto max-w-6xl px-4 py-4 text-sm text-[#8b95a8]">
+    <footer className="mt-auto border-t border-sg-panel-2">
+      <p className="mx-auto max-w-5xl px-4 py-6 text-sm text-sg-mute">
         Stormglass is not affiliated with Epic Games or Fortnite.
       </p>
     </footer>

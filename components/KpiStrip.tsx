@@ -4,18 +4,15 @@ export default function KpiStrip({
   items: { label: string; value: string }[];
 }) {
   return (
-    <ul className="grid grid-cols-2 gap-3 md:grid-cols-4">
+    <dl className="grid grid-cols-2 gap-x-8 gap-y-5 border-y border-sg-gold/30 py-6 md:grid-cols-4">
       {items.map((item) => (
-        <li
-          key={item.label}
-          className="rounded-sm border border-sg-panel-2 bg-sg-panel px-3 py-3 shadow-none"
-        >
-          <p className="text-sm text-[#8b95a8]">{item.label}</p>
-          <p className="sg-kpi mt-1 text-lg font-semibold text-sg-gold tabular-nums">
+        <div key={item.label}>
+          <dt className="text-sm text-sg-mute">{item.label}</dt>
+          <dd className="sg-kpi sg-display mt-1 text-2xl text-sg-ink">
             {item.value}
-          </p>
-        </li>
+          </dd>
+        </div>
       ))}
-    </ul>
+    </dl>
   );
 }

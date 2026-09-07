@@ -12,7 +12,7 @@ export default function GenreBoard({
   return (
     <section className="flex flex-col gap-3">
       <div className="flex items-baseline justify-between gap-3">
-        <h2 className="text-lg font-semibold">{genre.displayName}</h2>
+        <h2 className="text-3xl text-sg-ink">{genre.displayName}</h2>
         <Link
           href={`/rankings/${encodeURIComponent(genre.slug)}`}
           className="text-sm text-sg-cyan"
@@ -21,14 +21,12 @@ export default function GenreBoard({
         </Link>
       </div>
       {items.length === 0 ? (
-        <p className="text-sm text-[#8b95a8]">Not enough data</p>
+        <p className="text-sm text-sg-mute">Not enough data</p>
       ) : (
-        <ol className="flex flex-col gap-3 md:grid md:grid-cols-2 lg:grid-cols-4">
+        <ol className="flex gap-6 overflow-x-auto pb-2">
           {items.map((item) => (
-            <li key={item.island.code} className="flex flex-col gap-2">
-              <span className="sg-kpi text-sm font-semibold text-sg-gold tabular-nums">
-                {`#${item.rank}`}
-              </span>
+            <li key={item.island.code} className="w-64 shrink-0">
+              <p className="sg-kpi text-sm text-sg-gold">#{item.rank}</p>
               <IslandCard island={item.island} />
             </li>
           ))}

@@ -1,33 +1,35 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Instrument_Serif, Source_Sans_3 } from "next/font/google";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const instrument = Instrument_Serif({
+  variable: "--font-instrument",
   subsets: ["latin"],
+  weight: "400",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const sourceSans = Source_Sans_3({
+  variable: "--font-source-sans",
   subsets: ["latin"],
+  weight: ["400", "600"],
 });
 
 export const metadata: Metadata = {
   title: "Stormglass",
-  description: "Public Fortnite Creative and UEFN island analytics.",
+  description: "Look up a public Fortnite island by code and see how it is playing.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${instrument.variable} ${sourceSans.variable} h-full`}
     >
-      <body className="flex min-h-full flex-col bg-sg-canvas font-sans">
+      <body className="flex min-h-full flex-col font-sans">
         <SiteHeader />
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">{children}</main>
+        <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10">{children}</main>
         <SiteFooter />
       </body>
     </html>

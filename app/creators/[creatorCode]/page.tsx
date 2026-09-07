@@ -40,16 +40,17 @@ export default async function CreatorPage({
   return (
     <div className="flex flex-col gap-8">
       {catalog.stale ? <StaleBanner /> : null}
-      <h1 className="text-2xl font-semibold text-sg-gold">{creatorCode}</h1>
+      <h1 className="text-5xl text-sg-ink">{creatorCode}</h1>
       {islands.length === 0 ? (
         <>
-          <p className="text-sm text-[#8b95a8]">
-            No islands from this creator in the current catalog.
+          <p className="max-w-prose text-sg-mute">
+            No islands from this creator in the current catalog. Look up a
+            code to open one of theirs.
           </p>
           <Lookup />
         </>
       ) : (
-        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="flex max-w-prose flex-col">
           {islands.map((island) => (
             <li key={island.code}>
               <IslandCard island={island} genre={genre || undefined} />

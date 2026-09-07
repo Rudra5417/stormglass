@@ -67,17 +67,19 @@ export default async function RankingsGenrePage({
   return (
     <div className="flex flex-col gap-8">
       {genres.stale || rankings.stale || meta.stale ? <StaleBanner /> : null}
-      <h1 className="text-2xl font-semibold text-sg-gold">{genre.displayName}</h1>
+      <h1 className="text-5xl text-sg-ink">{genre.displayName}</h1>
       {items.length === 0 ? (
-        <p className="text-sm text-[#8b95a8]">Not enough data</p>
+        <p className="text-sm text-sg-mute">Not enough data</p>
       ) : (
-        <ol className="flex flex-col gap-3 md:grid md:grid-cols-2 lg:grid-cols-4">
+        <ol className="flex flex-col">
           {items.map((item) => (
-            <li key={item.island.code} className="flex flex-col gap-2">
-              <span className="sg-kpi text-sm font-semibold text-sg-gold tabular-nums">
+            <li key={item.island.code} className="flex gap-4">
+              <span className="sg-kpi w-10 shrink-0 pt-3 text-sg-gold">
                 {`#${item.rank}`}
               </span>
-              <IslandCard island={item.island} genre={slug} />
+              <div className="min-w-0 flex-1">
+                <IslandCard island={item.island} genre={slug} />
+              </div>
             </li>
           ))}
         </ol>

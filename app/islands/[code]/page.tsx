@@ -90,39 +90,24 @@ export default async function IslandPage({
   return (
     <div className="flex flex-col gap-8">
       {stale ? <StaleBanner /> : null}
-      <header className="flex flex-col gap-3">
-        <h1 className="text-3xl font-semibold text-sg-gold">{meta.title}</h1>
+      <header className="flex max-w-prose flex-col gap-3">
+        <h1 className="text-5xl leading-tight text-sg-ink">{meta.title}</h1>
         <CopyCode code={meta.code} />
-        <p>
+        <p className="text-sg-mute">
           <Link
             href={`/creators/${encodeURIComponent(meta.creatorCode)}`}
             className="text-sg-cyan"
           >
             {meta.creatorCode}
           </Link>
+          {`, ${meta.createdIn}`}
+          {meta.category ? `, ${meta.category}` : ""}
+          {meta.tags.length > 0 ? `, ${meta.tags.join(", ")}` : ""}
         </p>
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-sm border border-sg-panel-2 bg-sg-panel-2 px-2 py-0.5 text-xs">
-            {meta.createdIn}
-          </span>
-          {meta.category ? (
-            <span className="rounded-sm border border-sg-panel-2 bg-sg-panel px-2 py-0.5 text-xs">
-              {meta.category}
-            </span>
-          ) : null}
-          {meta.tags.map((tag) => (
-            <span
-              key={tag}
-              className="rounded-sm border border-sg-panel-2 bg-sg-panel px-2 py-0.5 text-xs"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
       </header>
       <KpiStrip items={kpiItems(pickDayKpis(day.data))} />
       <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold">Last 7 days</h2>
+        <h2 className="text-3xl text-sg-ink">Last 7 days</h2>
         <SeriesChart
           series={[
             { name: "Plays", points: toChartPoints(day.data.plays) },
@@ -139,7 +124,7 @@ export default async function IslandPage({
         />
       </section>
       <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold">Hourly peak CCU</h2>
+        <h2 className="text-3xl text-sg-ink">Hourly peak CCU</h2>
         <SeriesChart
           series={[
             { name: "Peak CCU", points: toChartPoints(hour.data.peakCCU) },
@@ -147,15 +132,15 @@ export default async function IslandPage({
         />
       </section>
       <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold">Genre ranks</h2>
+        <h2 className="text-3xl text-sg-ink">Genre ranks</h2>
         {currentRanks.length === 0 ? (
-          <p className="text-sm text-[#8b95a8]">Not enough data</p>
+          <p className="text-sm text-sg-mute">Not enough data</p>
         ) : (
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col">
             {currentRanks.map((rank) => (
               <li
                 key={rank.genreSlug}
-                className="flex items-center justify-between rounded-sm border border-transparent bg-sg-panel px-3 py-2 shadow-none hover:border-sg-gold"
+                className="flex items-baseline justify-between border-b border-sg-panel-2 py-2"
               >
                 <Link
                   href={`/rankings/${encodeURIComponent(rank.genreSlug)}`}
@@ -163,9 +148,7 @@ export default async function IslandPage({
                 >
                   {rank.genre}
                 </Link>
-                <span className="sg-kpi font-semibold text-sg-gold tabular-nums">
-                  #{rank.rank}
-                </span>
+                <span className="sg-kpi text-sg-gold">#{rank.rank}</span>
               </li>
             ))}
           </ul>
@@ -173,7 +156,7 @@ export default async function IslandPage({
         <RankChart series={toRankSeries(rankings.data)} />
       </section>
       <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold">Favorites vs recommendations</h2>
+        <h2 className="text-3xl text-sg-ink">Favorites vs recommendations</h2>
         <SeriesChart
           compact
           series={[

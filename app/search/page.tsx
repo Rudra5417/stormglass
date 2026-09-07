@@ -42,13 +42,13 @@ export default async function SearchPage({
   return (
     <div className="flex flex-col gap-8">
       {catalog.stale ? <StaleBanner /> : null}
-      <h1 className="text-2xl font-semibold text-sg-gold">Search</h1>
+      <h1 className="text-5xl text-sg-ink">Search</h1>
       {matches.length === 0 ? (
-        <p className="text-sm text-[#8b95a8]">
-          No matches. Search is code-first: try an island code like 6980-2761-9936.
+        <p className="max-w-prose text-sg-mute">
+          No matches. Try an island code like 6980-2761-9936.
         </p>
       ) : (
-        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="flex max-w-prose flex-col">
           {matches.map((island) => (
             <li key={island.code}>
               <IslandCard island={island} genre={genre || undefined} />

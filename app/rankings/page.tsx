@@ -19,21 +19,18 @@ export default async function RankingsPage() {
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex max-w-prose flex-col gap-8">
       {genres.stale ? <StaleBanner /> : null}
-      <h1 className="text-2xl font-semibold text-sg-gold">Rankings</h1>
+      <h1 className="text-5xl text-sg-ink">Rankings</h1>
       {genres.data.length === 0 ? (
-        <p className="text-sm text-[#8b95a8]">Not enough data</p>
+        <p className="text-sm text-sg-mute">Not enough data</p>
       ) : (
-        <ul className="flex flex-col gap-2">
+        <ul className="flex flex-col">
           {genres.data.map((genre) => (
-            <li
-              key={genre.slug}
-              className="rounded-sm border border-transparent bg-sg-panel px-3 py-2 shadow-none hover:border-sg-gold"
-            >
+            <li key={genre.slug} className="border-b border-sg-panel-2 py-3">
               <Link
                 href={`/rankings/${encodeURIComponent(genre.slug)}`}
-                className="text-sg-cyan"
+                className="text-xl text-sg-ink hover:text-sg-cyan"
               >
                 {genre.displayName}
               </Link>

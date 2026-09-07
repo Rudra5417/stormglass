@@ -8,20 +8,20 @@ export default function ErrorPanel({
   onRetry?: () => void;
 }) {
   return (
-    <div className="rounded-sm border border-sg-panel-2 bg-sg-panel px-4 py-3 shadow-none">
-      <p className="text-sm">{message}</p>
+    <div className="sg-plate px-4 py-4">
+      <p>{message}</p>
       {onRetry ? (
         <button
           type="button"
           onClick={onRetry}
-          className="mt-2 rounded-sm bg-sg-gold px-3 py-1.5 text-sm font-medium text-sg-canvas shadow-none"
+          className="mt-3 bg-sg-gold px-4 py-2 text-sm font-semibold text-sg-canvas"
         >
           Retry
         </button>
       ) : (
         <a
           href=""
-          className="mt-2 inline-block rounded-sm bg-sg-gold px-3 py-1.5 text-sm font-medium text-sg-canvas shadow-none"
+          className="mt-3 inline-block bg-sg-gold px-4 py-2 text-sm font-semibold text-sg-canvas"
         >
           Retry
         </a>

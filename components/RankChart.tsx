@@ -13,7 +13,7 @@ import {
 } from "recharts";
 import type { ChartPoint } from "@/lib/fortnite/types";
 
-const STROKE = "#5CE1E6";
+const STROKE = "#8FCBBE";
 const DASHES = [undefined, "4 4", "1 4", "8 4"] as const;
 
 function formatTick(iso: string): string {
@@ -46,14 +46,14 @@ export default function RankChart({
 
   if (series.every((s) => s.points.length === 0)) {
     return (
-      <div className="w-full rounded-sm border border-sg-panel-2 bg-sg-panel p-3 shadow-none">
-        <p className="text-sm text-[#8b95a8]">Not enough data</p>
+      <div className="w-full sg-plate p-3">
+        <p className="text-sm text-sg-mute">Not enough data</p>
       </div>
     );
   }
 
   return (
-    <div className="w-full rounded-sm border border-sg-panel-2 bg-sg-panel p-3 shadow-none">
+    <div className="w-full sg-plate p-3">
       <div className="h-64 w-full">
         <ResponsiveContainer
           width="100%"
@@ -61,36 +61,36 @@ export default function RankChart({
           initialDimension={{ width: 800, height: 256 }}
         >
           <LineChart data={data} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
-            <CartesianGrid stroke="#152A4A" strokeDasharray="3 3" />
+            <CartesianGrid stroke="#214246" strokeDasharray="3 3" />
             <XAxis
               dataKey="timestamp"
               tickFormatter={formatTick}
-              stroke="#152A4A"
-              tick={{ fill: "#8b95a8", fontSize: 12 }}
+              stroke="#214246"
+              tick={{ fill: "#8AA39C", fontSize: 12 }}
               interval="preserveStartEnd"
             />
             <YAxis
               reversed
               allowDecimals={false}
               domain={["dataMin", "dataMax"]}
-              stroke="#152A4A"
-              tick={{ fill: "#8b95a8", fontSize: 12 }}
+              stroke="#214246"
+              tick={{ fill: "#8AA39C", fontSize: 12 }}
               width={48}
             />
             <Tooltip
               labelFormatter={(label) => formatTick(String(label))}
               contentStyle={{
-                background: "#0E1A2E",
-                border: "1px solid #152A4A",
-                borderRadius: 2,
-                color: "#d5dbe8",
+                background: "#173033",
+                border: "1px solid #214246",
+                borderRadius: 0,
+                color: "#D8E6E2",
               }}
               formatter={(value) =>
                 typeof value === "number" ? `#${value}` : String(value)
               }
             />
             {series.length > 1 ? (
-              <Legend wrapperStyle={{ color: "#d5dbe8", fontSize: 12 }} />
+              <Legend wrapperStyle={{ color: "#D8E6E2", fontSize: 12 }} />
             ) : null}
             {series.map((s, index) => (
               <Line

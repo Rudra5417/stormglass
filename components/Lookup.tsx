@@ -35,12 +35,12 @@ export default function Lookup() {
       action="/search"
       method="get"
       onSubmit={onSubmit}
-      className="flex min-w-0 flex-1 flex-col gap-1"
+      className="flex min-w-0 flex-1 flex-col gap-2"
     >
-      <div className="flex min-w-0 items-center gap-2">
-        <label htmlFor={inputId} className="sr-only">
-          Island code
-        </label>
+      <label htmlFor={inputId} className="text-sm text-sg-mute">
+        Island code
+      </label>
+      <div className="flex min-w-0 items-stretch gap-2">
         <input
           id={inputId}
           name="q"
@@ -54,11 +54,11 @@ export default function Lookup() {
           spellCheck={false}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : undefined}
-          className="min-w-0 flex-1 rounded-sm border border-sg-panel-2 bg-sg-panel-2 px-3 py-1.5 text-sm text-[#d5dbe8] outline-none placeholder:text-[#8b95a8] focus:border-sg-cyan"
+          className="sg-display min-w-0 flex-1 border border-sg-gold/40 bg-sg-canvas px-4 py-3 text-2xl tracking-wide text-sg-ink outline-none placeholder:text-sg-mute/70"
         />
         <button
           type="submit"
-          className="rounded-sm bg-sg-gold px-3 py-1.5 text-sm font-medium text-sg-canvas shadow-none"
+          className="bg-sg-gold px-5 text-sm font-semibold text-sg-canvas"
         >
           Look up
         </button>
