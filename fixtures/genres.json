@@ -1,0 +1,7 @@
+{
+  "data": [
+    { "slug": "simulation-tycoon", "displayName": "Simulation & Tycoon" },
+    { "slug": "shooter", "displayName": "Shooter" },
+    { "slug": "battle-royale", "displayName": "Battle Royale" }
+  ]
+}

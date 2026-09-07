@@ -1,0 +1,11 @@
+{
+  "meta": {
+    "total": 10,
+    "snapshotAvailable": true,
+    "snapshot": "2026-09-07T15:00:00.000Z"
+  },
+  "data": [
+    { "islandCode": "6980-2761-9936", "rank": 1 },
+    { "islandCode": "1111-2222-3333", "rank": 2 }
+  ]
+}
