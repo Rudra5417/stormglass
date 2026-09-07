@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { formatIslandCode, parseIslandCode } from "./normalize";
+import { formatIslandCode, lookupHref, parseIslandCode } from "./normalize";
 
 test("parses hyphenated codes", () => {
   expect(parseIslandCode("6980-2761-9936")).toBe("6980-2761-9936");
@@ -19,4 +19,17 @@ test("rejects invalid shapes", () => {
 
 test("format is identity for canonical codes", () => {
   expect(formatIslandCode("6980-2761-9936")).toBe("6980-2761-9936");
+});
+
+test("canonical codes go to island page", () => {
+  expect(lookupHref("698027619936")).toBe("/islands/6980-2761-9936");
+});
+
+test("other queries go to search", () => {
+  expect(lookupHref("tycoon")).toBe("/search?q=tycoon");
+});
+
+test("empty lookup stays on home", () => {
+  expect(lookupHref("")).toBe("/");
+  expect(lookupHref("   ")).toBe("/");
 });

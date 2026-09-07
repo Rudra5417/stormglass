@@ -19,3 +19,11 @@ export function formatIslandCode(code: IslandCode): string {
 export function looksLikeIslandCode(input: string): boolean {
   return parseIslandCode(input) !== null || CANONICAL.test(input.trim());
 }
+
+export function lookupHref(q: string): string {
+  const code = parseIslandCode(q);
+  if (code) return `/islands/${code}`;
+  const trimmed = q.trim();
+  if (!trimmed) return "/";
+  return `/search?q=${encodeURIComponent(trimmed)}`;
+}
