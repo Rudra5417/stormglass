@@ -108,15 +108,28 @@ test("429 with prior success returns stale true", async () => {
 });
 
 test("isoRangeDays and isoRangeHours use from/to ISO bounds", () => {
-  const now = new Date("2026-09-07T15:00:00.000Z");
+  const now = new Date("2026-09-07T15:30:00.000Z");
   expect(isoRangeDays(7, now)).toEqual({
-    from: "2026-08-31T15:00:00.000Z",
-    to: "2026-09-07T15:00:00.000Z",
+    from: "2026-08-31T00:00:00.000Z",
+    to: "2026-09-07T00:00:00.000Z",
   });
   expect(isoRangeHours(24, now)).toEqual({
     from: "2026-09-06T15:00:00.000Z",
     to: "2026-09-07T15:00:00.000Z",
   });
+});
+
+test("two isoRangeDays(7) calls in the same UTC day produce the same from/to", () => {
+  expect(isoRangeDays(7, new Date("2026-09-07T01:02:03.456Z"))).toEqual(
+    isoRangeDays(7, new Date("2026-09-07T23:59:59.999Z")),
+  );
+  expect(isoRangeDays(7)).toEqual(isoRangeDays(7));
+});
+
+test("two isoRangeHours(24) calls in the same UTC hour produce the same from/to", () => {
+  expect(isoRangeHours(24, new Date("2026-09-07T15:00:00.000Z"))).toEqual(
+    isoRangeHours(24, new Date("2026-09-07T15:59:59.999Z")),
+  );
 });
 
 test("hour metrics uses from/to on the hour bundle path", async () => {
@@ -139,6 +152,7 @@ test("island metadata and day metrics revalidate 300s; everything else 60s", asy
   const fetchMock = vi.fn().mockResolvedValue(jsonResponse(metadata));
   vi.stubGlobal("fetch", fetchMock);
   await getIsland("6980-2761-9936");
+  expect(callInit(fetchMock).cache).toBe("force-cache");
   expect(callInit(fetchMock).next?.revalidate).toBe(300);
 
   fetchMock.mockResolvedValue(jsonResponse(populated));

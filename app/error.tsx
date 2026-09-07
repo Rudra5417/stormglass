@@ -4,10 +4,12 @@ import ErrorPanel from "@/components/ErrorPanel";
 
 export default function Error({
   error,
+  retry,
   reset,
 }: {
   error: Error & { digest?: string };
-  reset: () => void;
+  retry?: () => void;
+  reset?: () => void;
 }) {
-  return <ErrorPanel message={error.message} onRetry={reset} />;
+  return <ErrorPanel message={error.message} onRetry={retry ?? reset} />;
 }

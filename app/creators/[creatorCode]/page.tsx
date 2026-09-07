@@ -6,16 +6,25 @@ import { loadSeenCatalog } from "@/lib/fortnite/catalog";
 import { FortniteApiError, FortniteRateLimitError } from "@/lib/fortnite/errors";
 import { islandsForCreator } from "@/lib/fortnite/search";
 
+function queryOf(value: string | string[] | undefined): string {
+  if (typeof value === "string") return value;
+  if (Array.isArray(value) && typeof value[0] === "string") return value[0];
+  return "";
+}
+
 export default async function CreatorPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ creatorCode: string }>;
+  searchParams: Promise<{ genre?: string | string[] }>;
 }) {
   const { creatorCode } = await params;
+  const genre = queryOf((await searchParams).genre);
 
   let catalog;
   try {
-    catalog = await loadSeenCatalog();
+    catalog = await loadSeenCatalog(genre || undefined);
   } catch (error) {
     if (
       error instanceof FortniteRateLimitError ||
@@ -43,7 +52,7 @@ export default async function CreatorPage({
         <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {islands.map((island) => (
             <li key={island.code}>
-              <IslandCard island={island} />
+              <IslandCard island={island} genre={genre || undefined} />
             </li>
           ))}
         </ul>

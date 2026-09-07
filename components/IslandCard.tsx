@@ -1,7 +1,18 @@
 import Link from "next/link";
 import type { IslandMetadata } from "@/lib/fortnite/types";
 
-export default function IslandCard({ island }: { island: IslandMetadata }) {
+function creatorHref(creatorCode: string, genre?: string) {
+  const path = `/creators/${encodeURIComponent(creatorCode)}`;
+  return genre ? `${path}?genre=${encodeURIComponent(genre)}` : path;
+}
+
+export default function IslandCard({
+  island,
+  genre,
+}: {
+  island: IslandMetadata;
+  genre?: string;
+}) {
   return (
     <article className="sg-card rounded-sm border border-transparent bg-sg-panel p-3 shadow-none hover:border-sg-gold">
       <h3 className="text-base font-semibold">
@@ -14,7 +25,7 @@ export default function IslandCard({ island }: { island: IslandMetadata }) {
       </h3>
       <p className="mt-1">
         <Link
-          href={`/creators/${encodeURIComponent(island.creatorCode)}`}
+          href={creatorHref(island.creatorCode, genre)}
           className="text-sm text-sg-cyan"
         >
           {island.creatorCode}

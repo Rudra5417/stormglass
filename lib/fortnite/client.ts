@@ -18,24 +18,50 @@ export const FORTNITE_API_BASE = "https://api.fortnite.com/ecosystem/v1";
 
 export type FetchResult<T> = { data: T; stale: boolean };
 
+const LAST_SUCCESS_LIMIT = 200;
 const lastSuccess = new Map<string, unknown>();
+
+function utcDayStart(now: Date): Date {
+  return new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
+  );
+}
+
+function utcHourStart(now: Date): Date {
+  return new Date(
+    Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+      now.getUTCHours(),
+    ),
+  );
+}
 
 export function isoRangeDays(
   days: number,
   now: Date = new Date(),
 ): { from: string; to: string } {
-  const to = now.toISOString();
-  const from = new Date(now.getTime() - days * 24 * 60 * 60 * 1000).toISOString();
-  return { from, to };
+  const to = utcDayStart(now);
+  const from = new Date(to.getTime() - days * 24 * 60 * 60 * 1000);
+  return { from: from.toISOString(), to: to.toISOString() };
 }
 
 export function isoRangeHours(
   hours: number,
   now: Date = new Date(),
 ): { from: string; to: string } {
-  const to = now.toISOString();
-  const from = new Date(now.getTime() - hours * 60 * 60 * 1000).toISOString();
-  return { from, to };
+  const to = utcHourStart(now);
+  const from = new Date(to.getTime() - hours * 60 * 60 * 1000);
+  return { from: from.toISOString(), to: to.toISOString() };
+}
+
+function rememberSuccess(key: string, data: unknown) {
+  lastSuccess.delete(key);
+  lastSuccess.set(key, data);
+  if (lastSuccess.size <= LAST_SUCCESS_LIMIT) return;
+  const oldest = lastSuccess.keys().next().value;
+  if (oldest !== undefined) lastSuccess.delete(oldest);
 }
 
 function revalidateFor(path: string): number {
@@ -56,6 +82,7 @@ async function apiGet<T>(
   }
   const key = url.toString();
   const response = await fetch(key, {
+    cache: "force-cache",
     next: { revalidate: revalidateFor(path) },
   } as RequestInit);
   if (response.status === 404) {
@@ -74,7 +101,7 @@ async function apiGet<T>(
     );
   }
   const data = (await response.json()) as T;
-  lastSuccess.set(key, data);
+  rememberSuccess(key, data);
   return { data, stale: false };
 }
 

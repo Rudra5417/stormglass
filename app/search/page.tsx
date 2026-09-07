@@ -16,15 +16,17 @@ function queryOf(value: string | string[] | undefined): string {
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string | string[] }>;
+  searchParams: Promise<{ q?: string | string[]; genre?: string | string[] }>;
 }) {
-  const q = queryOf((await searchParams).q);
+  const params = await searchParams;
+  const q = queryOf(params.q);
+  const genre = queryOf(params.genre);
   const code = parseIslandCode(q);
   if (code) redirect(`/islands/${code}`);
 
   let catalog;
   try {
-    catalog = await loadSeenCatalog();
+    catalog = await loadSeenCatalog(genre || undefined);
   } catch (error) {
     if (
       error instanceof FortniteRateLimitError ||
@@ -49,7 +51,7 @@ export default async function SearchPage({
         <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {matches.map((island) => (
             <li key={island.code}>
-              <IslandCard island={island} />
+              <IslandCard island={island} genre={genre || undefined} />
             </li>
           ))}
         </ul>

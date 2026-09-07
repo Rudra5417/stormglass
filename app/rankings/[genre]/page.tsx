@@ -77,7 +77,7 @@ export default async function RankingsGenrePage({
               <span className="sg-kpi text-sm font-semibold text-sg-gold tabular-nums">
                 {`#${item.rank}`}
               </span>
-              <IslandCard island={item.island} />
+              <IslandCard island={item.island} genre={slug} />
             </li>
           ))}
         </ol>
