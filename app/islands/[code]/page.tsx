@@ -155,7 +155,7 @@ export default async function IslandPage({
             {currentRanks.map((rank) => (
               <li
                 key={rank.genreSlug}
-                className="flex items-center justify-between rounded-sm border border-sg-panel-2 bg-sg-panel px-3 py-2"
+                className="flex items-center justify-between rounded-sm border border-transparent bg-sg-panel px-3 py-2 shadow-none hover:border-sg-gold"
               >
                 <Link
                   href={`/rankings/${encodeURIComponent(rank.genreSlug)}`}
@@ -163,7 +163,7 @@ export default async function IslandPage({
                 >
                   {rank.genre}
                 </Link>
-                <span className="font-semibold text-sg-gold tabular-nums">
+                <span className="sg-kpi font-semibold text-sg-gold tabular-nums">
                   #{rank.rank}
                 </span>
               </li>

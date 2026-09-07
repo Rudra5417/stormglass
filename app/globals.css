@@ -22,6 +22,7 @@ body {
   background: var(--sg-canvas);
   color: #d5dbe8;
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  box-shadow: none;
 }
 
 .sg-gold {
@@ -30,4 +31,18 @@ body {
 
 .sg-cyan {
   color: var(--sg-cyan);
+}
+
+.sg-kpi {
+  font-variant-numeric: tabular-nums;
+}
+
+.sg-card {
+  border-radius: 2px;
+  border: 1px solid transparent;
+  box-shadow: none;
+}
+
+.sg-card:hover {
+  border-color: var(--sg-gold);
 }

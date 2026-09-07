@@ -58,7 +58,7 @@ export default function Lookup() {
         />
         <button
           type="submit"
-          className="rounded-sm bg-sg-gold px-3 py-1.5 text-sm font-medium text-sg-canvas"
+          className="rounded-sm bg-sg-gold px-3 py-1.5 text-sm font-medium text-sg-canvas shadow-none"
         >
           Look up
         </button>

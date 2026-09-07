@@ -29,7 +29,7 @@ export default async function RankingsPage() {
           {genres.data.map((genre) => (
             <li
               key={genre.slug}
-              className="rounded-sm border border-sg-panel-2 bg-sg-panel px-3 py-2"
+              className="rounded-sm border border-transparent bg-sg-panel px-3 py-2 shadow-none hover:border-sg-gold"
             >
               <Link
                 href={`/rankings/${encodeURIComponent(genre.slug)}`}

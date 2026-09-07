@@ -33,9 +33,9 @@ export default async function Home() {
         </p>
         <Lookup />
       </section>
-      <section className="rounded-sm border border-sg-panel-2 bg-sg-panel px-4 py-4">
+      <section className="rounded-sm border border-sg-panel-2 bg-sg-panel px-4 py-4 shadow-none">
         <p className="text-sm text-[#8b95a8]">In-match peak CCU</p>
-        <p className="mt-1 text-3xl font-semibold text-sg-gold tabular-nums">
+        <p className="sg-kpi mt-1 text-3xl font-semibold text-sg-gold tabular-nums">
           {formatCount(data.inMatchPeakCCU)}
         </p>
       </section>

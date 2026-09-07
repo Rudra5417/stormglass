@@ -46,14 +46,14 @@ export default function RankChart({
 
   if (series.every((s) => s.points.length === 0)) {
     return (
-      <div className="rounded-sm border border-sg-panel-2 bg-sg-panel p-3">
+      <div className="w-full rounded-sm border border-sg-panel-2 bg-sg-panel p-3 shadow-none">
         <p className="text-sm text-[#8b95a8]">Not enough data</p>
       </div>
     );
   }
 
   return (
-    <div className="rounded-sm border border-sg-panel-2 bg-sg-panel p-3">
+    <div className="w-full rounded-sm border border-sg-panel-2 bg-sg-panel p-3 shadow-none">
       <div className="h-64 w-full">
         <ResponsiveContainer
           width="100%"
@@ -72,6 +72,7 @@ export default function RankChart({
             <YAxis
               reversed
               allowDecimals={false}
+              domain={["dataMin", "dataMax"]}
               stroke="#152A4A"
               tick={{ fill: "#8b95a8", fontSize: 12 }}
               width={48}

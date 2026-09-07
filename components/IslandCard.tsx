@@ -3,9 +3,12 @@ import type { IslandMetadata } from "@/lib/fortnite/types";
 
 export default function IslandCard({ island }: { island: IslandMetadata }) {
   return (
-    <article className="rounded-sm border border-sg-panel-2 bg-sg-panel p-3 hover:border-sg-gold">
+    <article className="sg-card rounded-sm border border-transparent bg-sg-panel p-3 shadow-none hover:border-sg-gold">
       <h3 className="text-base font-semibold">
-        <Link href={`/islands/${encodeURIComponent(island.code)}`}>
+        <Link
+          href={`/islands/${encodeURIComponent(island.code)}`}
+          className="text-sg-cyan"
+        >
           {island.title}
         </Link>
       </h3>

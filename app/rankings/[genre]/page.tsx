@@ -25,7 +25,7 @@ export default async function RankingsGenrePage({
   try {
     [genres, rankings] = await Promise.all([
       getGenres(),
-      getGenreRankings(slug),
+      getGenreRankings(slug, 24),
     ]);
   } catch (error) {
     if (error instanceof FortniteNotFoundError) {
@@ -71,10 +71,10 @@ export default async function RankingsGenrePage({
       {items.length === 0 ? (
         <p className="text-sm text-[#8b95a8]">Not enough data</p>
       ) : (
-        <ol className="flex flex-col gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="flex flex-col gap-3 md:grid md:grid-cols-2 lg:grid-cols-4">
           {items.map((item) => (
             <li key={item.island.code} className="flex flex-col gap-2">
-              <span className="text-sm font-semibold text-sg-gold tabular-nums">
+              <span className="sg-kpi text-sm font-semibold text-sg-gold tabular-nums">
                 {`#${item.rank}`}
               </span>
               <IslandCard island={item.island} />

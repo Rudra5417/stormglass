@@ -71,7 +71,7 @@ export default function SeriesChart({
   const empty = visible.every((s) => s.points.length === 0);
 
   return (
-    <div className="rounded-sm border border-sg-panel-2 bg-sg-panel p-3">
+    <div className="w-full rounded-sm border border-sg-panel-2 bg-sg-panel p-3 shadow-none">
       {toggleNames?.length ? (
         <div className="mb-3 flex flex-wrap gap-2">
           {toggleNames.map((name) => (
@@ -81,8 +81,8 @@ export default function SeriesChart({
               onClick={() => setActive(name)}
               className={
                 name === active
-                  ? "rounded-sm bg-sg-gold px-2 py-1 text-sm text-sg-canvas"
-                  : "rounded-sm border border-sg-panel-2 bg-sg-panel-2 px-2 py-1 text-sm"
+                  ? "rounded-sm bg-sg-gold px-2 py-1 text-sm text-sg-canvas shadow-none"
+                  : "rounded-sm border border-sg-panel-2 bg-sg-panel-2 px-2 py-1 text-sm shadow-none"
               }
             >
               {name}
@@ -113,6 +113,7 @@ export default function SeriesChart({
                 tick={{ fill: "#8b95a8", fontSize: 12 }}
                 tickFormatter={(value: number) => value.toLocaleString("en-US")}
                 width={64}
+                className="tabular-nums"
               />
               <Tooltip
                 labelFormatter={(label) => formatTick(String(label))}
