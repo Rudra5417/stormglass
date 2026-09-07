@@ -209,6 +209,19 @@ test("getGenreRankings maps items and snapshot meta", async () => {
   );
 });
 
+test("getGenreRankings passes size and at", async () => {
+  const fetchMock = vi.fn().mockResolvedValue(jsonResponse(genreRankings));
+  vi.stubGlobal("fetch", fetchMock);
+  await getGenreRankings(
+    "simulation-tycoon",
+    24,
+    "2026-09-07T14:00:00.000Z",
+  );
+  const url = callUrl(fetchMock);
+  expect(url.searchParams.get("size")).toBe("24");
+  expect(url.searchParams.get("at")).toBe("2026-09-07T14:00:00.000Z");
+});
+
 test("getNewestIslands requests size and unwraps data", async () => {
   const fetchMock = vi.fn().mockResolvedValue(jsonResponse(newest));
   vi.stubGlobal("fetch", fetchMock);

@@ -2,6 +2,7 @@ import ErrorPanel from "@/components/ErrorPanel";
 import GenreBoard from "@/components/GenreBoard";
 import IslandCard from "@/components/IslandCard";
 import Lookup from "@/components/Lookup";
+import MoversBoard from "@/components/MoversBoard";
 import StaleBanner from "@/components/StaleBanner";
 import { FortniteApiError, FortniteRateLimitError } from "@/lib/fortnite/errors";
 import { loadHome } from "@/lib/fortnite/home";
@@ -40,6 +41,7 @@ export default async function Home() {
           </span>
         </p>
       </section>
+      <MoversBoard climbers={data.climbers} fallers={data.fallers} />
       {data.boards.map((board) => (
         <GenreBoard
           key={board.genre.slug}

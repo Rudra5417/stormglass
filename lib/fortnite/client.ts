@@ -159,7 +159,11 @@ export async function getGenres(): Promise<FetchResult<Genre[]>> {
 export async function getGenreRankings(
   slug: string,
   size?: number,
+  at?: string,
 ): Promise<FetchResult<GenreRankingPage>> {
+  const query: Record<string, string> = {};
+  if (size != null) query.size = String(size);
+  if (at) query.at = at;
   const result = await apiGet<{
     data: { islandCode: string; rank: number }[];
     meta: {
@@ -169,7 +173,7 @@ export async function getGenreRankings(
     };
   }>(
     `/genres/${slug}/rankings`,
-    size != null ? { size: String(size) } : undefined,
+    Object.keys(query).length > 0 ? query : undefined,
   );
   return {
     stale: result.stale,

@@ -6,8 +6,12 @@ import {
   getNewestIslands,
   isoRangeHours,
 } from "./client";
+import { FortniteNotFoundError, FortniteRateLimitError } from "./errors";
 import { selectHomeGenres } from "./genres";
+import { previousHourIso, rankMovers, type Mover } from "./movers";
 import type { Genre, IslandMetadata, MetricPoint } from "./types";
+
+export type HomeMover = Mover & { island: IslandMetadata; genre: Genre };
 
 export type HomePageData = {
   stale: boolean;
@@ -17,6 +21,8 @@ export type HomePageData = {
     items: { rank: number; island: IslandMetadata }[];
   }[];
   newest: IslandMetadata[];
+  climbers: HomeMover[];
+  fallers: HomeMover[];
 };
 
 export function collectHomeCodes(
@@ -48,6 +54,18 @@ function lastNonNullValue(points: MetricPoint[]): number | null {
   return null;
 }
 
+function takeUnique(movers: HomeMover[], limit: number): HomeMover[] {
+  const seen = new Set<string>();
+  const out: HomeMover[] = [];
+  for (const mover of movers) {
+    if (seen.has(mover.islandCode)) continue;
+    seen.add(mover.islandCode);
+    out.push(mover);
+    if (out.length >= limit) break;
+  }
+  return out;
+}
+
 export async function loadHome(): Promise<HomePageData> {
   const hourRange = isoRangeHours(24);
   const [ecosystem, genresResult, newestResult] = await Promise.all([
@@ -58,14 +76,46 @@ export async function loadHome(): Promise<HomePageData> {
 
   const homeGenres = selectHomeGenres(genresResult.data);
   const rankingPages = await Promise.all(
-    homeGenres.map((genre) => getGenreRankings(genre.slug)),
+    homeGenres.map((genre) => getGenreRankings(genre.slug, 24)),
+  );
+
+  const previousPages = await Promise.all(
+    homeGenres.map(async (genre, index) => {
+      const snapshot = rankingPages[index]?.data.snapshot;
+      if (!snapshot || rankingPages[index]?.data.snapshotAvailable === false) {
+        return null;
+      }
+      try {
+        return await getGenreRankings(
+          genre.slug,
+          24,
+          previousHourIso(snapshot),
+        );
+      } catch (error) {
+        if (
+          error instanceof FortniteNotFoundError ||
+          error instanceof FortniteRateLimitError
+        ) {
+          return null;
+        }
+        throw error;
+      }
+    }),
   );
 
   const rankingLists = rankingPages.map((page) =>
     page.data.items.map((item) => item.islandCode),
   );
   const newestCodes = newestResult.data.map((island) => island.code);
-  const codes = collectHomeCodes(rankingLists, newestCodes);
+  const moverCodes = homeGenres.flatMap((genre, index) => {
+    const current = rankingPages[index]?.data.items ?? [];
+    const previous = previousPages[index]?.data.items ?? [];
+    const { climbed, fell } = rankMovers(current, previous);
+    return [...climbed, ...fell].map((mover) => mover.islandCode);
+  });
+  const codes = [
+    ...new Set([...collectHomeCodes(rankingLists, newestCodes), ...moverCodes]),
+  ];
   const metadata = await getIslandMetadataMany(codes);
 
   const byCode = new Map(metadata.data.map((island) => [island.code, island]));
@@ -84,17 +134,42 @@ export async function loadHome(): Promise<HomePageData> {
     .slice(0, 12)
     .map((island) => byCode.get(island.code) ?? island);
 
+  const allClimbed: HomeMover[] = [];
+  const allFell: HomeMover[] = [];
+  for (const [index, genre] of homeGenres.entries()) {
+    const { climbed, fell } = rankMovers(
+      rankingPages[index]?.data.items ?? [],
+      previousPages[index]?.data.items ?? [],
+    );
+    for (const mover of climbed) {
+      const island = byCode.get(mover.islandCode);
+      if (island) allClimbed.push({ ...mover, island, genre });
+    }
+    for (const mover of fell) {
+      const island = byCode.get(mover.islandCode);
+      if (island) allFell.push({ ...mover, island, genre });
+    }
+  }
+  allClimbed.sort((a, b) => {
+    if (a.kind !== b.kind) return a.kind === "climbed" ? -1 : 1;
+    return (b.delta ?? 0) - (a.delta ?? 0);
+  });
+  allFell.sort((a, b) => (a.delta ?? 0) - (b.delta ?? 0));
+
   const stale =
     ecosystem.stale ||
     genresResult.stale ||
     newestResult.stale ||
     metadata.stale ||
-    rankingPages.some((page) => page.stale);
+    rankingPages.some((page) => page.stale) ||
+    previousPages.some((page) => page?.stale);
 
   return {
     stale,
     inMatchPeakCCU: lastNonNullValue(ecosystem.data.inMatchPeakCCU ?? []),
     boards,
     newest,
+    climbers: takeUnique(allClimbed, 5),
+    fallers: takeUnique(allFell, 5),
   };
 }

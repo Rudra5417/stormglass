@@ -58,6 +58,7 @@ export type DayKpis = {
   plays: number | null;
   peakCCU: number | null;
   averageMinutesPerPlayer: number | null;
+  minutesPlayed: number | null;
   d1: number | null;
   d7: number | null;
   favorites: number | null;

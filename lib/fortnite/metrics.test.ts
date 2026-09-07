@@ -2,9 +2,12 @@ import { expect, test } from "vitest";
 import populated from "../../fixtures/island-metrics-populated.json";
 import allNull from "../../fixtures/island-metrics-null.json";
 import {
+  favoritesPerThousand,
   formatCount,
+  formatDerived,
   formatRetention,
   lastCompleteUtcDay,
+  minutesPerPlay,
   pickDayKpis,
   toChartPoints,
 } from "./metrics";
@@ -20,6 +23,7 @@ test("pickDayKpis uses last complete UTC day not today", () => {
   const kpis = pickDayKpis(populated as IslandMetricsBundle, now);
   expect(kpis?.uniquePlayers).toBe(273541);
   expect(kpis?.plays).toBe(1812309);
+  expect(kpis?.minutesPlayed).toBe(31786868);
   expect(kpis?.d1).toBe(0.85);
 });
 
@@ -50,4 +54,21 @@ test("formatRetention renders ratios as percents", () => {
 test("formatCount renders null as not enough data", () => {
   expect(formatCount(273541)).toBe("273,541");
   expect(formatCount(null)).toBe("Not enough data");
+});
+
+test("minutesPerPlay divides minutes by plays", () => {
+  expect(minutesPerPlay(31786868, 1812309)).toBeCloseTo(17.54, 2);
+  expect(minutesPerPlay(null, 10)).toBeNull();
+  expect(minutesPerPlay(100, 0)).toBeNull();
+});
+
+test("favoritesPerThousand scales favorites by unique players", () => {
+  expect(favoritesPerThousand(2501, 273541)).toBeCloseTo(9.14, 2);
+  expect(favoritesPerThousand(10, null)).toBeNull();
+  expect(favoritesPerThousand(10, 0)).toBeNull();
+});
+
+test("formatDerived uses one decimal", () => {
+  expect(formatDerived(17.54)).toBe("17.5");
+  expect(formatDerived(null)).toBe("Not enough data");
 });

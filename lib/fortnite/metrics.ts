@@ -43,6 +43,7 @@ export function pickDayKpis(
       bundle.averageMinutesPerPlayer,
       timestamp,
     ),
+    minutesPlayed: valueAt(bundle.minutesPlayed, timestamp),
     d1: ret?.d1 ?? null,
     d7: ret?.d7 ?? null,
     favorites: valueAt(bundle.favorites, timestamp),
@@ -64,4 +65,27 @@ export function formatRetention(ratio: number | null): string {
 export function formatCount(value: number | null): string {
   if (value === null) return "Not enough data";
   return value.toLocaleString("en-US");
+}
+
+export function minutesPerPlay(
+  minutesPlayed: number | null,
+  plays: number | null,
+): number | null {
+  if (minutesPlayed === null || plays === null || plays === 0) return null;
+  return minutesPlayed / plays;
+}
+
+export function favoritesPerThousand(
+  favorites: number | null,
+  uniquePlayers: number | null,
+): number | null {
+  if (favorites === null || uniquePlayers === null || uniquePlayers === 0) {
+    return null;
+  }
+  return (favorites / uniquePlayers) * 1000;
+}
+
+export function formatDerived(value: number | null): string {
+  if (value === null) return "Not enough data";
+  return value.toFixed(1);
 }
