@@ -1,0 +1,34 @@
+{
+  "averageMinutesPerPlayer": [
+    { "value": 116.21, "timestamp": "2026-09-06T00:00:00.000Z" },
+    { "value": 49.81, "timestamp": "2026-09-07T00:00:00.000Z" }
+  ],
+  "peakCCU": [
+    { "value": 154444, "timestamp": "2026-09-06T00:00:00.000Z" },
+    { "value": 7901, "timestamp": "2026-09-07T00:00:00.000Z" }
+  ],
+  "favorites": [
+    { "value": 2501, "timestamp": "2026-09-06T00:00:00.000Z" },
+    { "value": 210, "timestamp": "2026-09-07T00:00:00.000Z" }
+  ],
+  "minutesPlayed": [
+    { "value": 31786868, "timestamp": "2026-09-06T00:00:00.000Z" },
+    { "value": 2027843, "timestamp": "2026-09-07T00:00:00.000Z" }
+  ],
+  "recommendations": [
+    { "value": 7212, "timestamp": "2026-09-06T00:00:00.000Z" },
+    { "value": 444, "timestamp": "2026-09-07T00:00:00.000Z" }
+  ],
+  "plays": [
+    { "value": 1812309, "timestamp": "2026-09-06T00:00:00.000Z" },
+    { "value": 168433, "timestamp": "2026-09-07T00:00:00.000Z" }
+  ],
+  "uniquePlayers": [
+    { "value": 273541, "timestamp": "2026-09-06T00:00:00.000Z" },
+    { "value": 40713, "timestamp": "2026-09-07T00:00:00.000Z" }
+  ],
+  "retention": [
+    { "d1": 0.85, "d7": 0.68, "timestamp": "2026-09-06T00:00:00.000Z" },
+    { "d1": 0.73, "d7": 0.67, "timestamp": "2026-09-07T00:00:00.000Z" }
+  ]
+}
