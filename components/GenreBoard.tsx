@@ -1,5 +1,5 @@
 import Link from "next/link";
-import IslandCard from "@/components/IslandCard";
+import IslandTile from "@/components/IslandTile";
 import type { Genre, IslandMetadata } from "@/lib/fortnite/types";
 
 export default function GenreBoard({
@@ -23,11 +23,14 @@ export default function GenreBoard({
       {items.length === 0 ? (
         <p className="text-sm text-sg-mute">Not enough data</p>
       ) : (
-        <ol className="flex gap-6 overflow-x-auto pb-2">
+        <ol className="flex gap-4 overflow-x-auto pb-2">
           {items.map((item) => (
-            <li key={item.island.code} className="w-64 shrink-0">
-              <p className="sg-kpi text-sm text-sg-gold">#{item.rank}</p>
-              <IslandCard island={item.island} />
+            <li key={item.island.code} className="w-72 shrink-0">
+              <IslandTile
+                island={item.island}
+                rank={item.rank}
+                genre={genre.slug}
+              />
             </li>
           ))}
         </ol>

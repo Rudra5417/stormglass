@@ -17,8 +17,12 @@ const sourceSans = Source_Sans_3({
 });
 
 export const metadata: Metadata = {
-  title: "Stormglass",
-  description: "Look up a public Fortnite island by code and see how it is playing.",
+  title: {
+    default: "Stormglass",
+    template: "%s",
+  },
+  description:
+    "Look up a public Fortnite island by code and see how it is playing.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -29,7 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col font-sans">
         <SiteHeader />
-        <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10">{children}</main>
+        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10">{children}</main>
         <SiteFooter />
       </body>
     </html>

@@ -57,10 +57,12 @@ export default function SeriesChart({
   series,
   toggleNames,
   compact,
+  percent,
 }: {
   series: ChartSeries[];
   toggleNames?: string[];
   compact?: boolean;
+  percent?: boolean;
 }) {
   const [active, setActive] = useState(toggleNames?.[0] ?? series[0]?.name);
   const visible = useMemo(() => {
@@ -111,7 +113,11 @@ export default function SeriesChart({
               <YAxis
                 stroke="#214246"
                 tick={{ fill: "#8AA39C", fontSize: 12 }}
-                tickFormatter={(value: number) => value.toLocaleString("en-US")}
+                tickFormatter={(value: number) =>
+                  percent
+                    ? `${Math.round(value)}%`
+                    : value.toLocaleString("en-US")
+                }
                 width={64}
                 className="tabular-nums"
               />
@@ -124,7 +130,11 @@ export default function SeriesChart({
                   color: "#D8E6E2",
                 }}
                 formatter={(value) =>
-                  typeof value === "number" ? value.toLocaleString("en-US") : String(value)
+                  typeof value === "number"
+                    ? percent
+                      ? `${Math.round(value)}%`
+                      : value.toLocaleString("en-US")
+                    : String(value)
                 }
               />
               {visible.length > 1 ? (

@@ -52,6 +52,44 @@ h2,
   border: 1px solid color-mix(in srgb, var(--sg-gold) 35%, var(--sg-panel-2));
 }
 
+.sg-tile {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  aspect-ratio: 16 / 9;
+}
+
+.sg-tile-art {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      90% 80% at calc(70% + var(--tile-x, 0%)) 12%,
+      color-mix(in srgb, var(--sg-gold) 40%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      80% 90% at calc(8% + var(--tile-y, 0%)) 88%,
+      color-mix(in srgb, var(--sg-cyan) 28%, transparent),
+      transparent 52%
+    ),
+    linear-gradient(158deg, #0c1c1e 0%, #173033 52%, #214246 100%);
+}
+
+.sg-tile-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    -18deg,
+    transparent,
+    transparent 10px,
+    rgba(16, 36, 38, 0.28) 10px,
+    rgba(16, 36, 38, 0.28) 11px
+  );
+  pointer-events: none;
+}
+
 a:focus-visible,
 button:focus-visible,
 input:focus-visible {

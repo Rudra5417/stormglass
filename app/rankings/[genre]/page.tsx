@@ -1,6 +1,7 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ErrorPanel from "@/components/ErrorPanel";
-import IslandCard from "@/components/IslandCard";
+import IslandTileGrid from "@/components/IslandTileGrid";
 import StaleBanner from "@/components/StaleBanner";
 import {
   getGenreRankings,
@@ -12,6 +13,26 @@ import {
   FortniteNotFoundError,
   FortniteRateLimitError,
 } from "@/lib/fortnite/errors";
+import { pageTitle } from "@/lib/ui/pageTitle";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ genre: string }>;
+}): Promise<Metadata> {
+  const { genre: slug } = await params;
+  try {
+    const genres = await getGenres();
+    const genre = genres.data.find((item) => item.slug === slug);
+    if (!genre) return { title: pageTitle("Rankings") };
+    return {
+      title: pageTitle(genre.displayName, "Rankings"),
+      description: `Public genre ranking for ${genre.displayName}.`,
+    };
+  } catch {
+    return { title: pageTitle("Rankings") };
+  }
+}
 
 export default async function RankingsGenrePage({
   params,
@@ -71,18 +92,13 @@ export default async function RankingsGenrePage({
       {items.length === 0 ? (
         <p className="text-sm text-sg-mute">Not enough data</p>
       ) : (
-        <ol className="flex flex-col">
-          {items.map((item) => (
-            <li key={item.island.code} className="flex gap-4">
-              <span className="sg-kpi w-10 shrink-0 pt-3 text-sg-gold">
-                {`#${item.rank}`}
-              </span>
-              <div className="min-w-0 flex-1">
-                <IslandCard island={item.island} genre={slug} />
-              </div>
-            </li>
-          ))}
-        </ol>
+        <IslandTileGrid
+          items={items.map((item) => ({
+            island: item.island,
+            rank: item.rank,
+            genre: slug,
+          }))}
+        />
       )}
     </div>
   );

@@ -1,10 +1,9 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import CopyCode from "@/components/CopyCode";
 import ErrorPanel from "@/components/ErrorPanel";
-import KpiStrip from "@/components/KpiStrip";
-import RankChart from "@/components/RankChart";
-import SeriesChart from "@/components/SeriesChart";
+import IslandDesk from "@/components/IslandDesk";
 import StaleBanner from "@/components/StaleBanner";
 import {
   getIsland,
@@ -15,16 +14,38 @@ import {
   isoRangeHours,
 } from "@/lib/fortnite/client";
 import { FortniteApiError, FortniteNotFoundError, FortniteRateLimitError } from "@/lib/fortnite/errors";
-import { kpiItems } from "@/lib/fortnite/kpiModel";
-import { pickDayKpis, toChartPoints } from "@/lib/fortnite/metrics";
+import { pulseKpiItems } from "@/lib/fortnite/kpiModel";
+import {
+  lastCompleteUtcDay,
+  pickDayKpis,
+  toChartPoints,
+} from "@/lib/fortnite/metrics";
 import { parseIslandCode } from "@/lib/fortnite/normalize";
+import {
+  healthReport,
+  rankHold,
+  retentionChartPoints,
+  weekReport,
+} from "@/lib/fortnite/trajectory";
 import type { ChartPoint, IslandGenreRank } from "@/lib/fortnite/types";
+import { pageTitle } from "@/lib/ui/pageTitle";
 
-function latestRanks(rankings: IslandGenreRank[]) {
-  if (rankings.length === 0) return [];
-  return rankings.reduce((latest, snap) =>
-    snap.timestamp > latest.timestamp ? snap : latest,
-  ).genres;
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ code: string }>;
+}): Promise<Metadata> {
+  const code = parseIslandCode((await params).code);
+  if (!code) return { title: pageTitle("Island not found") };
+  try {
+    const island = await getIsland(code);
+    return {
+      title: pageTitle(island.data.title, island.data.code),
+      description: `Public analytics for ${island.data.title} (${island.data.code}) by ${island.data.creatorCode}.`,
+    };
+  } catch {
+    return { title: pageTitle("Island not found") };
+  }
 }
 
 function toRankSeries(rankings: IslandGenreRank[]): {
@@ -85,7 +106,16 @@ export default async function IslandPage({
 
   const stale = island.stale || day.stale || hour.stale || rankings.stale;
   const meta = island.data;
-  const currentRanks = latestRanks(rankings.data);
+  const kpis = pickDayKpis(day.data);
+  const prior = pickDayKpis(day.data, new Date(lastCompleteUtcDay()));
+  const report = weekReport(day.data, rankings.data);
+  const deltas = prior
+    ? {
+        uniquePlayers: prior.uniquePlayers,
+        plays: prior.plays,
+        peakCCU: prior.peakCCU,
+      }
+    : null;
 
   return (
     <div className="flex flex-col gap-8">
@@ -105,69 +135,39 @@ export default async function IslandPage({
           {meta.tags.length > 0 ? `, ${meta.tags.join(", ")}` : ""}
         </p>
       </header>
-      <KpiStrip items={kpiItems(pickDayKpis(day.data))} />
-      <section className="flex flex-col gap-3">
-        <h2 className="text-3xl text-sg-ink">Last 7 days</h2>
-        <SeriesChart
-          series={[
-            { name: "Plays", points: toChartPoints(day.data.plays) },
-            {
-              name: "Unique players",
-              points: toChartPoints(day.data.uniquePlayers),
-            },
-            {
-              name: "Minutes played",
-              points: toChartPoints(day.data.minutesPlayed),
-            },
-          ]}
-          toggleNames={["Plays", "Unique players", "Minutes played"]}
-        />
-      </section>
-      <section className="flex flex-col gap-3">
-        <h2 className="text-3xl text-sg-ink">Hourly peak CCU</h2>
-        <SeriesChart
-          series={[
-            { name: "Peak CCU", points: toChartPoints(hour.data.peakCCU) },
-          ]}
-        />
-      </section>
-      <section className="flex flex-col gap-3">
-        <h2 className="text-3xl text-sg-ink">Genre ranks</h2>
-        {currentRanks.length === 0 ? (
-          <p className="text-sm text-sg-mute">Not enough data</p>
-        ) : (
-          <ul className="flex flex-col">
-            {currentRanks.map((rank) => (
-              <li
-                key={rank.genreSlug}
-                className="flex items-baseline justify-between border-b border-sg-panel-2 py-2"
-              >
-                <Link
-                  href={`/rankings/${encodeURIComponent(rank.genreSlug)}`}
-                  className="text-sg-cyan"
-                >
-                  {rank.genre}
-                </Link>
-                <span className="sg-kpi text-sg-gold">#{rank.rank}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-        <RankChart series={toRankSeries(rankings.data)} />
-      </section>
-      <section className="flex flex-col gap-3">
-        <h2 className="text-3xl text-sg-ink">Favorites vs recommendations</h2>
-        <SeriesChart
-          compact
-          series={[
-            { name: "Favorites", points: toChartPoints(day.data.favorites) },
-            {
-              name: "Recommendations",
-              points: toChartPoints(day.data.recommendations),
-            },
-          ]}
-        />
-      </section>
+      <IslandDesk
+        kpis={pulseKpiItems(kpis, deltas)}
+        health={healthReport(kpis, prior)}
+        report={report}
+        holds={rankHold(rankings.data)}
+        spans={report.ranks}
+        rankSeries={toRankSeries(rankings.data)}
+        playSeries={[
+          { name: "Plays", points: toChartPoints(day.data.plays) },
+          {
+            name: "Unique players",
+            points: toChartPoints(day.data.uniquePlayers),
+          },
+          {
+            name: "Minutes played",
+            points: toChartPoints(day.data.minutesPlayed),
+          },
+        ]}
+        hourSeries={[
+          { name: "Peak CCU", points: toChartPoints(hour.data.peakCCU) },
+        ]}
+        retentionSeries={[
+          { name: "D1", points: retentionChartPoints(day.data.retention, "d1") },
+          { name: "D7", points: retentionChartPoints(day.data.retention, "d7") },
+        ]}
+        favSeries={[
+          { name: "Favorites", points: toChartPoints(day.data.favorites) },
+          {
+            name: "Recommendations",
+            points: toChartPoints(day.data.recommendations),
+          },
+        ]}
+      />
     </div>
   );
 }

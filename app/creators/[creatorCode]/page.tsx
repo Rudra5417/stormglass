@@ -1,15 +1,26 @@
+import type { Metadata } from "next";
 import ErrorPanel from "@/components/ErrorPanel";
-import IslandCard from "@/components/IslandCard";
+import IslandTileGrid from "@/components/IslandTileGrid";
 import Lookup from "@/components/Lookup";
 import StaleBanner from "@/components/StaleBanner";
 import { loadSeenCatalog } from "@/lib/fortnite/catalog";
 import { FortniteApiError, FortniteRateLimitError } from "@/lib/fortnite/errors";
 import { islandsForCreator } from "@/lib/fortnite/search";
+import { pageTitle } from "@/lib/ui/pageTitle";
 
 function queryOf(value: string | string[] | undefined): string {
   if (typeof value === "string") return value;
   if (Array.isArray(value) && typeof value[0] === "string") return value[0];
   return "";
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ creatorCode: string }>;
+}): Promise<Metadata> {
+  const { creatorCode } = await params;
+  return { title: pageTitle(decodeURIComponent(creatorCode)) };
 }
 
 export default async function CreatorPage({
@@ -50,13 +61,12 @@ export default async function CreatorPage({
           <Lookup />
         </>
       ) : (
-        <ul className="flex max-w-prose flex-col">
-          {islands.map((island) => (
-            <li key={island.code}>
-              <IslandCard island={island} genre={genre || undefined} />
-            </li>
-          ))}
-        </ul>
+        <IslandTileGrid
+          items={islands.map((island) => ({
+            island,
+            genre: genre || undefined,
+          }))}
+        />
       )}
     </div>
   );

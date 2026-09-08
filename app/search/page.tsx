@@ -1,16 +1,29 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import ErrorPanel from "@/components/ErrorPanel";
-import IslandCard from "@/components/IslandCard";
+import IslandTileGrid from "@/components/IslandTileGrid";
 import StaleBanner from "@/components/StaleBanner";
 import { loadSeenCatalog } from "@/lib/fortnite/catalog";
 import { FortniteApiError, FortniteRateLimitError } from "@/lib/fortnite/errors";
 import { parseIslandCode } from "@/lib/fortnite/normalize";
 import { filterIslands } from "@/lib/fortnite/search";
+import { pageTitle } from "@/lib/ui/pageTitle";
 
 function queryOf(value: string | string[] | undefined): string {
   if (typeof value === "string") return value;
   if (Array.isArray(value) && typeof value[0] === "string") return value[0];
   return "";
+}
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string | string[] }>;
+}): Promise<Metadata> {
+  const q = queryOf((await searchParams).q);
+  return {
+    title: q ? pageTitle("Search", q) : pageTitle("Search"),
+  };
 }
 
 export default async function SearchPage({
@@ -48,13 +61,12 @@ export default async function SearchPage({
           No matches. Try an island code like 6980-2761-9936.
         </p>
       ) : (
-        <ul className="flex max-w-prose flex-col">
-          {matches.map((island) => (
-            <li key={island.code}>
-              <IslandCard island={island} genre={genre || undefined} />
-            </li>
-          ))}
-        </ul>
+        <IslandTileGrid
+          items={matches.map((island) => ({
+            island,
+            genre: genre || undefined,
+          }))}
+        />
       )}
     </div>
   );
