@@ -9,6 +9,8 @@ import { loadHome } from "@/lib/fortnite/home";
 import { formatCount } from "@/lib/fortnite/metrics";
 import { tileShift } from "@/lib/ui/tileShift";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   let data;
   try {

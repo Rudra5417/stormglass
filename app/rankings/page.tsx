@@ -6,6 +6,8 @@ import { getGenres } from "@/lib/fortnite/client";
 import { FortniteApiError, FortniteRateLimitError } from "@/lib/fortnite/errors";
 import { pageTitle } from "@/lib/ui/pageTitle";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: pageTitle("Rankings"),
   description: "Public Fortnite Creative and UEFN genre rankings.",
