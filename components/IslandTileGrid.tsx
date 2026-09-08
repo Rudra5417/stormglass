@@ -7,7 +7,7 @@ export default function IslandTileGrid({
   items: { island: IslandMetadata; rank?: number; genre?: string }[];
 }) {
   return (
-    <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <ul className="grid grid-cols-2 gap-3 lg:grid-cols-3 lg:gap-4">
       {items.map((item) => (
         <li key={item.island.code}>
           <IslandTile

@@ -88,7 +88,9 @@ export default async function RankingsGenrePage({
   return (
     <div className="flex flex-col gap-8">
       {genres.stale || rankings.stale || meta.stale ? <StaleBanner /> : null}
-      <h1 className="text-5xl text-sg-ink">{genre.displayName}</h1>
+      <h1 className="break-words text-3xl text-sg-ink sm:text-5xl">
+        {genre.displayName}
+      </h1>
       {items.length === 0 ? (
         <p className="text-sm text-sg-mute">Not enough data</p>
       ) : (

@@ -36,9 +36,9 @@ export default async function Home() {
           {catalogError}. Lookup still works.
         </p>
       ) : null}
-      <section className="grid items-stretch gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(16rem,0.75fr)]">
+      <section className="grid min-w-0 items-stretch gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(16rem,0.75fr)]">
         <div className="flex flex-col justify-center">
-          <h1 className="text-5xl leading-tight text-sg-ink md:text-6xl">
+          <h1 className="text-3xl leading-tight text-sg-ink sm:text-5xl md:text-6xl">
             Enter an island code
           </h1>
           <p className="mt-3 max-w-prose text-sg-mute">
@@ -59,7 +59,7 @@ export default async function Home() {
           />
           <div className="relative flex h-full flex-col justify-between p-5">
             <p className="text-sm text-sg-mute">In matches now</p>
-            <p className="sg-display sg-kpi text-6xl leading-none text-sg-gold">
+            <p className="sg-display sg-kpi break-all text-5xl leading-none text-sg-gold sm:text-6xl">
               {formatCount(data?.inMatchPeakCCU ?? null)}
             </p>
             <p className="text-sm text-sg-mute">Fortnite-wide peak CCU</p>
@@ -77,13 +77,13 @@ export default async function Home() {
             />
           ))}
           <section className="flex flex-col gap-3">
-            <h2 className="text-3xl text-sg-ink">Newest</h2>
+            <h2 className="text-2xl text-sg-ink sm:text-3xl">Newest</h2>
             {data.newest.length === 0 ? (
               <p className="text-sm text-sg-mute">Not enough data</p>
             ) : (
-              <ul className="flex gap-4 overflow-x-auto pb-2">
+              <ul className="sg-rail">
                 {data.newest.map((island) => (
-                  <li key={island.code} className="w-72 shrink-0">
+                  <li key={island.code}>
                     <IslandTile island={island} />
                   </li>
                 ))}

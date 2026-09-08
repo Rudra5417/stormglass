@@ -55,7 +55,7 @@ export default async function SearchPage({
   return (
     <div className="flex flex-col gap-8">
       {catalog.stale ? <StaleBanner /> : null}
-      <h1 className="text-5xl text-sg-ink">Search</h1>
+      <h1 className="text-3xl text-sg-ink sm:text-5xl">Search</h1>
       {matches.length === 0 ? (
         <p className="max-w-prose text-sg-mute">
           No matches. Try an island code like 6980-2761-9936.

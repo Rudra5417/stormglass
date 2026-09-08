@@ -13,14 +13,14 @@ export default function GenreTile({ genre }: { genre: Genre }) {
           ["--tile-y" as string]: art.y,
         }}
       />
-      <p className="sg-display pointer-events-none absolute -bottom-2 right-1 text-[4.5rem] leading-none text-sg-gold/25">
+      <p className="sg-display pointer-events-none absolute -bottom-2 right-1 text-[3.25rem] leading-none text-sg-gold/25 sm:text-[4.5rem]">
         {genre.displayName.slice(0, 2)}
       </p>
       <div className="relative flex h-full flex-col justify-end p-4">
-        <h2 className="text-2xl leading-snug">
+        <h2 className="text-lg leading-snug sm:text-2xl">
           <Link
             href={`/rankings/${encodeURIComponent(genre.slug)}`}
-            className="text-sg-ink hover:text-sg-cyan"
+            className="line-clamp-2 break-words pr-8 text-sg-ink hover:text-sg-cyan sm:pr-10"
           >
             {genre.displayName}
           </Link>

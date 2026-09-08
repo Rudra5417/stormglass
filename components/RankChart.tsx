@@ -53,29 +53,30 @@ export default function RankChart({
   }
 
   return (
-    <div className="w-full sg-plate p-3">
-      <div className="h-64 w-full">
+    <div className="w-full min-w-0 overflow-hidden sg-plate p-3">
+      <div className="h-56 w-full sm:h-64">
         <ResponsiveContainer
           width="100%"
           height="100%"
           initialDimension={{ width: 800, height: 256 }}
         >
-          <LineChart data={data} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
+          <LineChart data={data} margin={{ top: 8, right: 4, left: 0, bottom: 0 }}>
             <CartesianGrid stroke="#214246" strokeDasharray="3 3" />
             <XAxis
               dataKey="timestamp"
               tickFormatter={formatTick}
               stroke="#214246"
-              tick={{ fill: "#8AA39C", fontSize: 12 }}
+              tick={{ fill: "#8AA39C", fontSize: 11 }}
               interval="preserveStartEnd"
+              minTickGap={24}
             />
             <YAxis
               reversed
               allowDecimals={false}
               domain={["dataMin", "dataMax"]}
               stroke="#214246"
-              tick={{ fill: "#8AA39C", fontSize: 12 }}
-              width={48}
+              tick={{ fill: "#8AA39C", fontSize: 11 }}
+              width={36}
             />
             <Tooltip
               labelFormatter={(label) => formatTick(String(label))}

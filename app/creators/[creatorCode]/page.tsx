@@ -51,7 +51,9 @@ export default async function CreatorPage({
   return (
     <div className="flex flex-col gap-8">
       {catalog.stale ? <StaleBanner /> : null}
-      <h1 className="text-5xl text-sg-ink">{creatorCode}</h1>
+      <h1 className="break-words text-3xl text-sg-ink sm:text-5xl">
+        {creatorCode}
+      </h1>
       {islands.length === 0 ? (
         <>
           <p className="max-w-prose text-sg-mute">

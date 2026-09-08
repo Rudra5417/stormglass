@@ -22,7 +22,7 @@ export default function PlacementTiles({
           const fill =
             hold.hours === 0 ? 0 : Math.round((hold.hoursInTop8 / hold.hours) * 100);
           return (
-            <article key={hold.genreSlug} className="sg-plate sg-tile">
+            <article key={hold.genreSlug} className="sg-plate sg-tile sg-tile-short">
               <div
                 className="sg-tile-art"
                 style={{
@@ -30,11 +30,11 @@ export default function PlacementTiles({
                   ["--tile-y" as string]: art.y,
                 }}
               />
-              <p className="sg-display pointer-events-none absolute -bottom-3 right-2 text-[7.5rem] leading-none text-sg-gold/25">
+              <p className="sg-display pointer-events-none absolute -bottom-3 right-2 text-[4.5rem] leading-none text-sg-gold/25 sm:text-[7.5rem]">
                 #{hold.currentRank}
               </p>
-              <div className="relative flex h-full flex-col justify-between p-4">
-                <div className="flex items-start justify-between gap-3">
+              <div className="relative flex h-full min-w-0 flex-col justify-between p-4">
+                <div className="flex min-w-0 items-start justify-between gap-3">
                   <Link
                     href={`/rankings/${encodeURIComponent(hold.genreSlug)}`}
                     className="text-sg-cyan"

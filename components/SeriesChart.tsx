@@ -30,13 +30,21 @@ function formatTick(iso: string): string {
     });
   }
   return d.toLocaleString("en-US", {
-    month: "short",
-    day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
     timeZone: "UTC",
   });
+}
+
+function compactNum(value: number): string {
+  const abs = Math.abs(value);
+  if (abs >= 1_000_000) {
+    const m = value / 1_000_000;
+    return `${m >= 10 || m <= -10 ? m.toFixed(0) : m.toFixed(1)}M`;
+  }
+  if (abs >= 10_000) return `${Math.round(value / 1000)}k`;
+  return value.toLocaleString("en-US");
 }
 
 function mergeSeries(series: ChartSeries[]) {
@@ -73,7 +81,7 @@ export default function SeriesChart({
   const empty = visible.every((s) => s.points.length === 0);
 
   return (
-    <div className="w-full sg-plate p-3">
+    <div className="w-full min-w-0 overflow-hidden sg-plate p-3">
       {toggleNames?.length ? (
         <div className="mb-3 flex flex-wrap gap-2">
           {toggleNames.map((name) => (
@@ -83,8 +91,8 @@ export default function SeriesChart({
               onClick={() => setActive(name)}
               className={
                 name === active
-                  ? "bg-sg-gold px-2 py-1 text-sm text-sg-canvas"
-                  : "border border-sg-panel-2 px-2 py-1 text-sm text-sg-mute"
+                  ? "min-h-11 bg-sg-gold px-3 py-1 text-sm text-sg-canvas"
+                  : "min-h-11 border border-sg-panel-2 px-3 py-1 text-sm text-sg-mute"
               }
             >
               {name}
@@ -95,30 +103,29 @@ export default function SeriesChart({
       {empty ? (
         <p className="text-sm text-sg-mute">Not enough data</p>
       ) : (
-        <div className={compact ? "h-48 w-full" : "h-64 w-full"}>
+        <div className={compact ? "h-44 w-full sm:h-48" : "h-52 w-full sm:h-64"}>
           <ResponsiveContainer
             width="100%"
             height="100%"
             initialDimension={{ width: 800, height: compact ? 192 : 256 }}
           >
-            <LineChart data={data} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
+            <LineChart data={data} margin={{ top: 8, right: 4, left: 0, bottom: 0 }}>
               <CartesianGrid stroke="#214246" strokeDasharray="3 3" />
               <XAxis
                 dataKey="timestamp"
                 tickFormatter={formatTick}
                 stroke="#214246"
-                tick={{ fill: "#8AA39C", fontSize: 12 }}
+                tick={{ fill: "#8AA39C", fontSize: 11 }}
                 interval="preserveStartEnd"
+                minTickGap={24}
               />
               <YAxis
                 stroke="#214246"
-                tick={{ fill: "#8AA39C", fontSize: 12 }}
+                tick={{ fill: "#8AA39C", fontSize: 11 }}
                 tickFormatter={(value: number) =>
-                  percent
-                    ? `${Math.round(value)}%`
-                    : value.toLocaleString("en-US")
+                  percent ? `${Math.round(value)}%` : compactNum(value)
                 }
-                width={64}
+                width={44}
                 className="tabular-nums"
               />
               <Tooltip

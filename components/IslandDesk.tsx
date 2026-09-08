@@ -47,7 +47,7 @@ export default function IslandDesk({
       <div
         role="tablist"
         aria-label="Island analytics"
-        className="flex gap-6 border-b border-sg-gold/30"
+        className="flex gap-1 overflow-x-auto border-b border-sg-gold/30 sm:gap-6"
       >
         {TABS.map((name) => (
           <button
@@ -58,8 +58,8 @@ export default function IslandDesk({
             onClick={() => setTab(name)}
             className={
               tab === name
-                ? "border-b-2 border-sg-gold pb-2 text-sg-ink"
-                : "pb-2 text-sg-mute"
+                ? "min-h-11 shrink-0 border-b-2 border-sg-gold px-2 text-sg-ink first:pl-0 sm:px-0"
+                : "min-h-11 shrink-0 px-2 text-sg-mute first:pl-0 sm:px-0"
             }
           >
             {name}
@@ -75,7 +75,7 @@ export default function IslandDesk({
       ) : null}
       {tab === "Placement" ? (
         <div className="flex flex-col gap-6">
-          <h2 className="text-3xl text-sg-ink">Genre hold this week</h2>
+          <h2 className="text-2xl text-sg-ink sm:text-3xl">Genre hold this week</h2>
           <PlacementTiles holds={holds} spans={spans} />
           <RankChart series={rankSeries} />
         </div>
@@ -83,18 +83,18 @@ export default function IslandDesk({
       {tab === "Sessions" ? (
         <div className="flex flex-col gap-8">
           <section className="flex flex-col gap-3">
-            <h2 className="text-3xl text-sg-ink">Last 7 days</h2>
+            <h2 className="text-2xl text-sg-ink sm:text-3xl">Last 7 days</h2>
             <SeriesChart
               series={playSeries}
               toggleNames={["Plays", "Unique players", "Minutes played"]}
             />
           </section>
           <section className="flex flex-col gap-3">
-            <h2 className="text-3xl text-sg-ink">Hourly peak CCU</h2>
+            <h2 className="text-2xl text-sg-ink sm:text-3xl">Hourly peak CCU</h2>
             <SeriesChart series={hourSeries} />
           </section>
           <section className="flex flex-col gap-3">
-            <h2 className="text-3xl text-sg-ink">Retention</h2>
+            <h2 className="text-2xl text-sg-ink sm:text-3xl">Retention</h2>
             <SeriesChart
               series={retentionSeries}
               toggleNames={["D1", "D7"]}
@@ -102,7 +102,9 @@ export default function IslandDesk({
             />
           </section>
           <section className="flex flex-col gap-3">
-            <h2 className="text-3xl text-sg-ink">Favorites vs recommendations</h2>
+            <h2 className="text-2xl text-sg-ink sm:text-3xl">
+              Favorites vs recommendations
+            </h2>
             <SeriesChart compact series={favSeries} />
           </section>
         </div>

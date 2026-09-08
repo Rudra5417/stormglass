@@ -30,11 +30,11 @@ export default async function RankingsPage() {
   return (
     <div className="flex flex-col gap-8">
       {genres.stale ? <StaleBanner /> : null}
-      <h1 className="text-5xl text-sg-ink">Rankings</h1>
+      <h1 className="text-3xl text-sg-ink sm:text-5xl">Rankings</h1>
       {genres.data.length === 0 ? (
         <p className="text-sm text-sg-mute">Not enough data</p>
       ) : (
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid grid-cols-2 gap-3 lg:grid-cols-3 lg:gap-4">
           {genres.data.map((genre) => (
             <li key={genre.slug}>
               <GenreTile genre={genre} />

@@ -24,12 +24,14 @@ export default function CopyCode({ code }: { code: string }) {
   }
 
   return (
-    <span className="inline-flex items-baseline gap-3">
-      <span className="sg-display text-2xl tracking-wide text-sg-gold">{code}</span>
+    <span className="inline-flex flex-wrap items-center gap-x-3 gap-y-1">
+      <span className="sg-display text-xl tracking-wide text-sg-gold sm:text-2xl">
+        {code}
+      </span>
       <button
         type="button"
         onClick={onCopy}
-        className="text-sm text-sg-cyan"
+        className="min-h-11 px-1 text-sm text-sg-cyan"
       >
         {copied ? "Copied" : "Copy"}
       </button>

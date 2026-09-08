@@ -48,7 +48,13 @@ export default function Lookup({
       >
         Island code
       </label>
-      <div className="flex min-w-0 items-stretch gap-2">
+      <div
+        className={
+          compact
+            ? "flex min-w-0 items-stretch gap-2"
+            : "flex min-w-0 flex-col items-stretch gap-2 sm:flex-row"
+        }
+      >
         <input
           id={inputId}
           name="q"
@@ -59,21 +65,24 @@ export default function Lookup({
           }}
           placeholder="6980-2761-9936"
           autoComplete="off"
+          autoCapitalize="none"
+          autoCorrect="off"
           spellCheck={false}
+          enterKeyHint="go"
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : undefined}
           className={
             compact
-              ? "sg-display min-w-0 w-44 border border-sg-gold/40 bg-sg-canvas px-3 py-2 text-base tracking-wide text-sg-ink outline-none placeholder:text-sg-mute/70"
-              : "sg-display min-w-0 flex-1 border border-sg-gold/40 bg-sg-canvas px-4 py-4 text-3xl tracking-wide text-sg-ink outline-none placeholder:text-sg-mute/70"
+              ? "sg-display min-w-0 w-full flex-1 border border-sg-gold/40 bg-sg-canvas px-3 py-3 text-base tracking-wide text-sg-ink outline-none placeholder:text-sg-mute/70"
+              : "sg-display min-w-0 w-full flex-1 border border-sg-gold/40 bg-sg-canvas px-3 py-3 text-xl tracking-wide text-sg-ink outline-none placeholder:text-sg-mute/70 sm:px-4 sm:py-4 sm:text-3xl"
           }
         />
         <button
           type="submit"
           className={
             compact
-              ? "bg-sg-gold px-3 text-sm font-semibold text-sg-canvas"
-              : "bg-sg-gold px-6 text-sm font-semibold text-sg-canvas"
+              ? "min-h-11 shrink-0 bg-sg-gold px-4 text-sm font-semibold text-sg-canvas"
+              : "min-h-12 shrink-0 bg-sg-gold px-6 text-sm font-semibold text-sg-canvas sm:min-h-0"
           }
         >
           Look up

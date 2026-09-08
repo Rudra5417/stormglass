@@ -20,12 +20,9 @@ function Row({
       {movers.length === 0 ? (
         <p className="text-sm text-sg-mute">No movement this hour</p>
       ) : (
-        <ul className="flex gap-4 overflow-x-auto pb-2">
+        <ul className="sg-rail">
           {movers.map((mover) => (
-            <li
-              key={`${mover.genre.slug}-${mover.islandCode}`}
-              className="w-72 shrink-0"
-            >
+            <li key={`${mover.genre.slug}-${mover.islandCode}`}>
               <p className="mb-1 text-sm text-sg-mute">{mover.genre.displayName}</p>
               <IslandTile
                 island={mover.island}
@@ -51,7 +48,7 @@ export default function MoversBoard({
   if (climbers.length === 0 && fallers.length === 0) return null;
   return (
     <section className="flex flex-col gap-8">
-      <h2 className="text-3xl text-sg-ink">Movers this hour</h2>
+      <h2 className="text-2xl text-sg-ink sm:text-3xl">Movers this hour</h2>
       <Row title="Climbed" movers={climbers} />
       <Row title="Fell" movers={fallers} />
     </section>

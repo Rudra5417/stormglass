@@ -29,10 +29,10 @@ export default function IslandTile({
           ["--tile-y" as string]: art.y,
         }}
       />
-      <p className="sg-display pointer-events-none absolute -bottom-2 right-1 text-[5.5rem] leading-none text-sg-gold/25">
+      <p className="sg-display pointer-events-none absolute -bottom-2 right-1 text-[3.25rem] leading-none text-sg-gold/25 sm:text-[5.5rem]">
         {mark}
       </p>
-      <div className="relative flex h-full flex-col justify-between p-3">
+      <div className="relative flex h-full min-w-0 flex-col justify-between p-3">
         <div className="flex items-start justify-between gap-2">
           {badge ? (
             <span className="sg-kpi text-sm text-sg-gold">{badge}</span>
@@ -40,11 +40,11 @@ export default function IslandTile({
             <span className="text-sm text-sg-mute">{island.createdIn}</span>
           )}
         </div>
-        <div>
-          <h3 className="text-lg leading-snug">
+        <div className="min-w-0">
+          <h3 className="text-base leading-snug sm:text-lg">
             <Link
               href={`/islands/${encodeURIComponent(island.code)}`}
-              className="text-sg-ink hover:text-sg-cyan"
+              className="line-clamp-2 break-words pr-8 text-sg-ink hover:text-sg-cyan sm:pr-10"
             >
               {island.title}
             </Link>

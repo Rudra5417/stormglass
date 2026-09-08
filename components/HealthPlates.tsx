@@ -20,12 +20,14 @@ const PLATES: {
 export default function HealthPlates({ health }: { health: HealthReport }) {
   return (
     <section className="flex flex-col gap-3">
-      <h2 className="text-3xl text-sg-ink">Yesterday vs the day before</h2>
+      <h2 className="text-2xl text-sg-ink sm:text-3xl">
+        Yesterday vs the day before
+      </h2>
       <div className="grid gap-3 sm:grid-cols-3">
         {PLATES.map((plate) => {
           const tone = TONE[health[plate.key]];
           return (
-            <article key={plate.key} className="sg-plate sg-tile">
+            <article key={plate.key} className="sg-plate sg-tile sg-tile-short">
               <div
                 className="sg-tile-art"
                 style={
@@ -38,7 +40,7 @@ export default function HealthPlates({ health }: { health: HealthReport }) {
               />
               <div className="relative flex h-full flex-col justify-between p-4">
                 <p className="text-sm text-sg-mute">{plate.title}</p>
-                <p className={`sg-display text-5xl leading-none ${tone.className}`}>
+                <p className={`sg-display text-4xl leading-none sm:text-5xl ${tone.className}`}>
                   {tone.word}
                 </p>
                 <p className="text-sm text-sg-mute">{plate.hint}</p>

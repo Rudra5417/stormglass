@@ -121,7 +121,9 @@ export default async function IslandPage({
     <div className="flex flex-col gap-8">
       {stale ? <StaleBanner /> : null}
       <header className="flex max-w-prose flex-col gap-3">
-        <h1 className="text-5xl leading-tight text-sg-ink">{meta.title}</h1>
+        <h1 className="break-words text-3xl leading-tight text-sg-ink sm:text-5xl">
+          {meta.title}
+        </h1>
         <CopyCode code={meta.code} />
         <p className="text-sg-mute">
           <Link
