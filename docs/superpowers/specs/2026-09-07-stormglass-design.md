@@ -2,7 +2,6 @@
 
 Public Fortnite Creative / UEFN island analytics explorer. Live data from Epic’s Fortnite Data API. Original brand, not an official Epic product.
 
-**Repo root:** `C:\Users\rudi.patel\Desktop\stormglass`  
 **Run:** `npm run dev` → `http://localhost:3000`  
 **Publish:** local-first. Vercel only when explicitly requested. Not GitHub Pages (needs a Node server).
 

@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- Repo root is `C:\Users\rudi.patel\Desktop\stormglass`; `npm run dev` serves `http://localhost:3000`
+- `npm run dev` serves `http://localhost:3000`
 - Fortnite Data API base `https://api.fortnite.com/ecosystem/v1`; no OAuth; query params `from` and `to` (ISO-8601), never `startDate`/`endDate`
 - Never `fetch` Epic from a `'use client'` file; never scrape fortnite.gg; no thumbnails
 - Do not use the eight single-metric island paths; use bundle endpoints
@@ -90,7 +90,7 @@ fixtures/
 
 - [ ] **Step 1: Scaffold the Next.js app in the existing folder**
 
-From `C:\Users\rudi.patel\Desktop\stormglass` (do not `git init`):
+From the repo root (do not `git init`):
 
 ```bash
 npx create-next-app@latest . --typescript --tailwind --eslint --app --no-src-dir --import-alias "@/*" --use-npm --turbopack --yes

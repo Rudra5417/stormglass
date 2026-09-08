@@ -30,3 +30,7 @@ npm run build
 ## Stack
 
 Next.js App Router, TypeScript, Tailwind, Recharts. Server Components fetch Epic; the browser never calls the Data API directly.
+
+## Secrets
+
+None. The Fortnite Data API is public and unauthenticated. This repo has no `.env`, API keys, or tokens. Do not add any.
