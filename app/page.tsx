@@ -1,4 +1,3 @@
-import ErrorPanel from "@/components/ErrorPanel";
 import GenreBoard from "@/components/GenreBoard";
 import IslandTile from "@/components/IslandTile";
 import Lookup from "@/components/Lookup";
@@ -12,7 +11,8 @@ import { tileShift } from "@/lib/ui/tileShift";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  let data;
+  let data = null;
+  let catalogError: string | null = null;
   try {
     data = await loadHome();
   } catch (error) {
@@ -20,16 +20,22 @@ export default async function Home() {
       error instanceof FortniteRateLimitError ||
       error instanceof FortniteApiError
     ) {
-      return <ErrorPanel message={error.message} />;
+      catalogError = error.message;
+    } else {
+      throw error;
     }
-    throw error;
   }
 
   const ccuArt = tileShift("ecosystem-ccu");
 
   return (
     <div className="flex flex-col gap-16">
-      {data.stale ? <StaleBanner /> : null}
+      {data?.stale ? <StaleBanner /> : null}
+      {catalogError ? (
+        <p className="sg-plate px-4 py-3 text-sm text-sg-mute">
+          {catalogError}. Lookup still works.
+        </p>
+      ) : null}
       <section className="grid items-stretch gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(16rem,0.75fr)]">
         <div className="flex flex-col justify-center">
           <h1 className="text-5xl leading-tight text-sg-ink md:text-6xl">
@@ -54,34 +60,38 @@ export default async function Home() {
           <div className="relative flex h-full flex-col justify-between p-5">
             <p className="text-sm text-sg-mute">In matches now</p>
             <p className="sg-display sg-kpi text-6xl leading-none text-sg-gold">
-              {formatCount(data.inMatchPeakCCU)}
+              {formatCount(data?.inMatchPeakCCU ?? null)}
             </p>
             <p className="text-sm text-sg-mute">Fortnite-wide peak CCU</p>
           </div>
         </article>
       </section>
-      <MoversBoard climbers={data.climbers} fallers={data.fallers} />
-      {data.boards.map((board) => (
-        <GenreBoard
-          key={board.genre.slug}
-          genre={board.genre}
-          items={board.items}
-        />
-      ))}
-      <section className="flex flex-col gap-3">
-        <h2 className="text-3xl text-sg-ink">Newest</h2>
-        {data.newest.length === 0 ? (
-          <p className="text-sm text-sg-mute">Not enough data</p>
-        ) : (
-          <ul className="flex gap-4 overflow-x-auto pb-2">
-            {data.newest.map((island) => (
-              <li key={island.code} className="w-72 shrink-0">
-                <IslandTile island={island} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      {data ? (
+        <>
+          <MoversBoard climbers={data.climbers} fallers={data.fallers} />
+          {data.boards.map((board) => (
+            <GenreBoard
+              key={board.genre.slug}
+              genre={board.genre}
+              items={board.items}
+            />
+          ))}
+          <section className="flex flex-col gap-3">
+            <h2 className="text-3xl text-sg-ink">Newest</h2>
+            {data.newest.length === 0 ? (
+              <p className="text-sm text-sg-mute">Not enough data</p>
+            ) : (
+              <ul className="flex gap-4 overflow-x-auto pb-2">
+                {data.newest.map((island) => (
+                  <li key={island.code} className="w-72 shrink-0">
+                    <IslandTile island={island} />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </>
+      ) : null}
     </div>
   );
 }
